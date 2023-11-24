@@ -23,3 +23,12 @@ exports.getAllBooks = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.addBook = async (req, res, next) => {
+  try {
+    const newBook = await Book.create(req.body);
+    return res.status(201).json(newBook);
+  } catch (error) {
+    next(error);
+  }
+};

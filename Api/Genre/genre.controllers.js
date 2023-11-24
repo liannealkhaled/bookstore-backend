@@ -8,9 +8,9 @@ exports.getAllGenre = async (req, res, next) => {
 
 exports.addGenre = async (req, res, next) => {
   try {
-    if (req.file) {
-      req.body.image = req.file.path.replace("\\", "/");
-    }
+    // if (req.file) {
+    //   req.body.image = req.file.path.replace("\\", "/");
+    // }
     const newGenre = await Genre.create(req.body);
     return res.status(201).json(newGenre);
   } catch (error) {

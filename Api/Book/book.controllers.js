@@ -2,18 +2,6 @@ const Genre = require("../../models/Genre");
 const Author = require("../../models/Author");
 const Book = require("../../models/Book");
 
-// exports.AddBook = async(req,res, next)=>{
-//     try {
-//        const newBook = await Book.create()
-
-//     //    after adding, update genre and author
-//     await Genre.find
-
-//     } catch (error) {
-//         next(error)
-//     }
-// }
-
 exports.getAllBooks = async (req, res, next) => {
   try {
     const books = await Book.find();
@@ -27,19 +15,19 @@ exports.getAllBooks = async (req, res, next) => {
 exports.addBook = async (req, res, next) => {
   try {
     if (req.file) {
-      req.body.recipeimage = req.file.path.replace("\\", "/");
+      req.body.bookimage = req.file.path.replace("\\", "/");
     }
     const newBookData = {
       ...req.body,
-      author: req.author.id,
+      author: req.author._id,
     };
 
     const newBook = await Book.create(newBookData);
     await Genre.findByIdAndUpdate(req.body.genre, {
-      $push: { books: newBook.id },
+      $push: { books: newBook._id },
     });
     await Author.findByIdAndUpdate(req.author.id, {
-      $push: { books: newBook.id },
+      $push: { books: newBook._id },
     });
 
     return res.status(201).json(newBook);

@@ -26,7 +26,22 @@ exports.getAllBooks = async (req, res, next) => {
 
 exports.addBook = async (req, res, next) => {
   try {
-    const newBook = await Book.create(req.body);
+    if (req.file) {
+      req.body.recipeimage = req.file.path.replace("\\", "/");
+    }
+    const newBookData = {
+      ...req.body,
+      author: req.author.id,
+    };
+
+    const newBook = await Book.create(newBookData);
+    await Genre.findByIdAndUpdate(req.body.genre, {
+      $push: { books: newBook.id },
+    });
+    await Author.findByIdAndUpdate(req.author.id, {
+      $push: { books: newBook.id },
+    });
+
     return res.status(201).json(newBook);
   } catch (error) {
     next(error);

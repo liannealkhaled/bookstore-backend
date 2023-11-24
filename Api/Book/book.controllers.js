@@ -17,16 +17,17 @@ exports.addBook = async (req, res, next) => {
     if (req.file) {
       req.body.bookimage = req.file.path.replace("\\", "/");
     }
+
     const newBookData = {
       ...req.body,
       author: req.author._id,
     };
-
+    console.log(newBookData);
     const newBook = await Book.create(newBookData);
     await Genre.findByIdAndUpdate(req.body.genre, {
       $push: { books: newBook._id },
     });
-    await Author.findByIdAndUpdate(req.author.id, {
+    await Author.findByIdAndUpdate(req.author._id, {
       $push: { books: newBook._id },
     });
 

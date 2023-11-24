@@ -12,7 +12,7 @@ const hashedPassword = async (password) => {
 
 const generateToken = (author) => {
   const payload = {
-    _id: author._id,
+    id: author._id,
     username: author.username,
   };
   return jwt.sign(payload, process.env.JWT_SECRET, {

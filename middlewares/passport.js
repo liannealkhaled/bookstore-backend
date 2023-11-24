@@ -29,7 +29,7 @@ const jWTStrategy = new JWTStrategy(
   async (payload, done) => {
     try {
       if (Date.now() / 1000 > payload.exp) return done(null, false);
-      const author = await Author.findById(payload._id);
+      const author = await Author.findById(payload.id);
       if (!author) return done(null, false);
       return done(null, author);
     } catch (error) {

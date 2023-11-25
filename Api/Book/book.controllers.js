@@ -20,14 +20,14 @@ exports.addBook = async (req, res, next) => {
 
     const newBookData = {
       ...req.body,
-      author: req.author._id,
+      author: req.user._id,
     };
     console.log(newBookData);
     const newBook = await Book.create(newBookData);
     await Genre.findByIdAndUpdate(req.body.genre, {
       $push: { books: newBook._id },
     });
-    await Author.findByIdAndUpdate(req.author._id, {
+    await Author.findByIdAndUpdate(req.user._id, {
       $push: { books: newBook._id },
     });
 
